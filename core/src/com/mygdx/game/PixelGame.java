@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.GameObjects.Level;
+import com.mygdx.game.GameObjects.LevelInfo;
 
 
 public class PixelGame extends ApplicationAdapter {

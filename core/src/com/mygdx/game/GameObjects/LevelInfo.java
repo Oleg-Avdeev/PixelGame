@@ -1,11 +1,12 @@
-package com.mygdx.game;
+package com.mygdx.game.GameObjects;
+
+import com.mygdx.game.Point;
 
 import java.io.Serializable;
 import java.util.Hashtable;
 
 public class LevelInfo implements Serializable
 {
-    //Сумки, найду, убью.
     int[][] MapArray;
     int StartX, StartY;
     Hashtable<Point,Point> TriggerTarget;

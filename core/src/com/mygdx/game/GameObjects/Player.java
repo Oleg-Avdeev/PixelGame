@@ -1,8 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.GameObjects;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.PixelGame;
+import com.mygdx.game.Point;
 
 
 public class Player implements InputProcessor{
