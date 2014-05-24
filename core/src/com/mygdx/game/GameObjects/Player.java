@@ -1,43 +1,29 @@
 package com.mygdx.game.GameObjects;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.PixelGame;
 import com.mygdx.game.Point;
 
 
-public class Player implements InputProcessor{
+public class Player {
 
     Texture PlayerTexture;
     SpriteBatch Sb;
     Level level;
 
-    public boolean Finished;
     private int x, y;
     private int Xshift = 0, Yshift = 0;
 
-    class TouchInfo {
-        public float touchX = 0;
-        public float touchY = 0;
-        public boolean touched = false;
-    }
+    public boolean Finished = false;
 
-    private TouchInfo touch = new TouchInfo();
-
-    public Player(SpriteBatch sb, Level lev)
+    public Player(SpriteBatch sb, Level lev, Point start)
     {
         PlayerTexture = new Texture("Player.png");
         Sb = sb;
         level = lev;
-        UpdatePlayer();
-    }
-
-    public void UpdatePlayer()
-    {
-        Finished = false;
-        x = level.StartX;
-        y = level.level.getHeight() - 1 - level.StartY;
+        x = start.X;
+        y = level.level.getHeight() - 1 - start.Y;
     }
 
     public void Draw()
@@ -51,59 +37,25 @@ public class Player implements InputProcessor{
         );
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
+    public void Release() {
+        if (Math.abs(Xshift) > 5) {
+            x += Math.abs(Xshift) / Xshift;
+            Xshift = 0;
+        } else if (Math.abs(Xshift) <= 5) {
+            Xshift = 0;
+        }
+
+        if (Yshift > 5) {
+            y -= Math.abs(Yshift) / Yshift;
+            Yshift = 0;
+        } else if (Yshift <= 5) {
+            Yshift = 0;
+        }
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        touch.touched = true;
-        touch.touchX = screenX;
-        touch.touchY = screenY;
-        return true;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        touch.touched = false;
-        touch.touchX = 0;
-        touch.touchY = 0;
-
-        if (Math.abs(Xshift) > 5)
-        {x += Math.abs(Xshift)/Xshift;
-        Xshift = 0;}
-        else if (Math.abs(Xshift) <= 5)
-        {Xshift = 0;}
-
-        if (Yshift > 5)
-        {y -= Math.abs(Yshift)/Yshift;
-        Yshift = 0;}
-        else if (Yshift <= 5)
-        {Yshift = 0;}
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public void MakeMovement(int shiftX, int shiftY) {
 
         boolean Moved = false;
-
-        float deltaX = screenX - touch.touchX;
-        float deltaY = screenY - touch.touchY;
-
-        int shiftX = getSpeed(deltaX);
-        int shiftY = getSpeed(deltaY);
 
         if (shiftX != 0) {
             Point point = new Point(x + shiftX / Math.abs(shiftX),y);
@@ -112,7 +64,7 @@ public class Player implements InputProcessor{
             } else if (level.LevelMap[x + shiftX / Math.abs(shiftX)][y] == 2) {
                 MakeXmove(shiftX);
                 Moved = true;
-                Finished = true;
+                Finish();
             } else if (level.TriggerTarget.containsKey(point))
             {
                 MakeXmove(shiftX);
@@ -131,7 +83,7 @@ public class Player implements InputProcessor{
             }
             if (level.LevelMap[x][y - shiftY / Math.abs(shiftY)] == 2) {
                 MakeYmove(shiftY);
-                Finished = true;
+                Finish();
             }
             else if (level.TriggerTarget.containsKey(point))
             {
@@ -142,7 +94,6 @@ public class Player implements InputProcessor{
                 level.TriggerTarget.remove(point);
             }
         }
-        return true;
     }
 
     private void ActivateTrigger(Point point) {
@@ -153,12 +104,6 @@ public class Player implements InputProcessor{
         level.SetPixel(point.X,point.Y, level.Road);
     }
 
-    private int getSpeed(float delta){
-        if (Math.abs(delta) >= 5d) {
-            return (int)(5*delta/Math.abs(delta));
-        }
-        return 0;
-    }
 
     private void MakeXmove(int shift)
     {
@@ -180,13 +125,10 @@ public class Player implements InputProcessor{
         }
     }
 
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+    private void Finish()
+    {
+        level.FinishedPlayers++;
+        Finished = true;
     }
 
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
 }

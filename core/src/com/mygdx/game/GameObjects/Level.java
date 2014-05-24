@@ -9,6 +9,7 @@ import com.mygdx.game.PixelGame;
 import com.mygdx.game.PlayerController;
 import com.mygdx.game.Point;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -16,7 +17,6 @@ public class Level {
 
     Texture level;
     int[][] LevelMap;
-    public int StartX, StartY;
     public Hashtable<Point,Point> TriggerTarget = new Hashtable<Point, Point>();
 
     public int TriggerColor = (184 << 24) | (37 << 16) | (53 << 8) | 255;
@@ -28,15 +28,19 @@ public class Level {
 
     PlayerController Controller;
     int FinishedPlayers = 0;
-    List<Player> Players;
+    public List<Player> Players;
 
     public Level (int LevelNumber, int LevelPosX, int LevelPosY, LevelInfo lvlInfo, SpriteBatch sb) {
 
         if (lvlInfo != null) {
             LevelMap = lvlInfo.MapArray;
             level = new Texture("Level-" + LevelNumber + ".png");
-            StartX = lvlInfo.StartX;
-            StartY = lvlInfo.StartY;
+
+            Players = new ArrayList<Player>();
+            for (Point start : lvlInfo.Starts)
+            {
+                Players.add(new Player(sb, this, start));
+            }
             TriggerTarget = lvlInfo.TriggerTarget;
             for(Point prime : TriggerTarget.keySet())
             {
@@ -48,7 +52,6 @@ public class Level {
         topMargin = (LevelPosY - level.getHeight() * PixelGame.PixelScale) / 2;
         Sb = sb;
 
-        Players.add(new Player(Sb, this));
         Controller = new PlayerController(this);
         Gdx.input.setInputProcessor(Controller);
     }

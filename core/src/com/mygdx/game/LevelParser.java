@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.mygdx.game.GameObjects.LevelInfo;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class LevelParser
 {
@@ -21,7 +23,7 @@ public class LevelParser
         Pixmap map = data.consumePixmap();
 
         Color color = new Color();
-        int startX = 0, startY = 0;
+        List<Point> Starts = new ArrayList<Point>();
         Hashtable<Point,Point> TriggerTarget = new Hashtable<Point, Point>();
 
         int[][] Map = new int[map.getWidth()][map.getHeight()];
@@ -34,8 +36,7 @@ public class LevelParser
                 float cola = color.a;
 
                 if (col.equals("1279afff")) {
-                    startX = x;
-                    startY = y;
+                    Starts.add(new Point(x,y));
                     Map[x][map.getHeight() - y - 1] = 1;}
 
                 else if (col.equals("1279aeff"))
@@ -57,7 +58,7 @@ public class LevelParser
                     Map[x][map.getHeight() - y - 1] = 0;
                 }
             }
-        LevelInfo LvlInfo = new LevelInfo(Map, startX, startY, TriggerTarget);
+        LevelInfo LvlInfo = new LevelInfo(Map, Starts, TriggerTarget);
         savefile.SaveLevel(LvlInfo, LevelNumber);
     }
 

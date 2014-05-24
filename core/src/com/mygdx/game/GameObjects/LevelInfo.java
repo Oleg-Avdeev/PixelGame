@@ -3,19 +3,20 @@ package com.mygdx.game.GameObjects;
 import com.mygdx.game.Point;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class LevelInfo implements Serializable
 {
     int[][] MapArray;
-    int StartX, StartY;
+    public List<Point> Starts = new ArrayList<Point>();
     Hashtable<Point,Point> TriggerTarget;
 
-    public LevelInfo(int[][] map, int startX, int startY, Hashtable<Point, Point> triggerTarget)
+    public LevelInfo(int[][] map, List<Point> starts, Hashtable<Point, Point> triggerTarget)
     {
         MapArray = map;
-        StartX = startX;
-        StartY = startY;
+        Starts = starts;
         TriggerTarget = triggerTarget;
     }
 }

@@ -53,9 +53,17 @@ public class PixelGame extends ApplicationAdapter {
 
     public static void NextLevelPlease()
     {
-        LevelNumber++;
-        LevelParser.ParseNextLevel(LevelNumber, savefile);
-        RunLevel();
+        try {
+            LevelNumber++;
+            LevelParser.ParseNextLevel(LevelNumber, savefile);
+            RunLevel();
+        }
+        catch (Exception e)
+        {
+            LevelNumber--;
+            LevelParser.ParseNextLevel(LevelNumber, savefile);
+            RunLevel();
+        }
     }
 
     public static boolean Fade;
