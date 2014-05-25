@@ -7,6 +7,7 @@ import com.mygdx.game.GameObjects.Player;
 public class PlayerController implements InputProcessor {
 
     Level level;
+    int fingers = 0;
 
     public PlayerController(Level _level){
         level = _level;
@@ -49,6 +50,9 @@ public class PlayerController implements InputProcessor {
         touch.touched = true;
         touch.touchX = screenX;
         touch.touchY = screenY;
+
+        fingers++;
+
         return true;
     }
 
@@ -57,6 +61,8 @@ public class PlayerController implements InputProcessor {
         touch.touched = false;
         touch.touchX = 0;
         touch.touchY = 0;
+
+        fingers--;
 
         for(Player player : level.Players)
         {
@@ -69,19 +75,18 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-
+    if (fingers <= 2) {
         float deltaX = screenX - touch.touchX;
         float deltaY = screenY - touch.touchY;
 
         int shiftX = getSpeed(deltaX);
         int shiftY = getSpeed(deltaY);
 
-        for(Player player : level.Players)
-        {
+        for (Player player : level.Players) {
             if (!player.Finished)
                 player.MakeMovement(shiftX, shiftY);
         }
-
+    }
         return true;
     }
 
