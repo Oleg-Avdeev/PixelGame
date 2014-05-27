@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.GameObjects.Progression;
 import com.mygdx.game.PixelGame;
 import com.mygdx.game.SoundFactory;
 
@@ -78,7 +79,11 @@ public class MainMenu {
         PlayLevel.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 Active = false;
-                PixelGame.NextLevelPlease();
+                Progression progression = PixelGame.GetProgression();
+                if (progression != null)
+                    PixelGame.RunLevel(progression.LevelNumber);
+                else
+                    PixelGame.RunLevel(1);
                 return true;
             }
         });

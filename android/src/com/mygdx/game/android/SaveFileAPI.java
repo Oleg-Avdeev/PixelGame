@@ -3,6 +3,7 @@ package com.mygdx.game.android;
 import android.os.Environment;
 
 import com.mygdx.game.GameObjects.LevelInfo;
+import com.mygdx.game.GameObjects.Progression;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,44 +15,74 @@ import java.io.ObjectOutputStream;
 
 public class SaveFileAPI {
 
+    static File sdCard = Environment.getExternalStorageDirectory();
+
     public static void SaveLevel(LevelInfo info, int number) {
         if (isExternalStorageWritable()) {
-            File sdCard = Environment.getExternalStorageDirectory();
+
             File dir = new File(sdCard.getAbsolutePath() + "/PixelGame/levels");
             dir.mkdirs();
             File file = new File(dir, "level-" + number + ".rbi");
+            SaveObject(info, file);
+        }
+    }
 
-            try {
-                FileOutputStream FOT = new FileOutputStream(file);
-                ObjectOutputStream OOS = new ObjectOutputStream(FOT);
-                OOS.writeObject(info);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public static void SaveProgression(Progression progress)
+    {
+        if (isExternalStorageWritable()) {
+            File dir = new File(sdCard.getAbsolutePath() + "/PixelGame");
+            dir.mkdirs();
+            File file = new File(dir, "progress.prg");
+            SaveObject(progress, file);
         }
     }
 
     public static LevelInfo LoadLevelInfo(String name) {
         if (isExternalStorageWritable()) {
-            File sdCard = Environment.getExternalStorageDirectory();
             File dir = new File(sdCard.getAbsolutePath() + "/PixelGame/levels");
             File file = new File(dir, name);
-
-            try {
-                FileInputStream FIT = new FileInputStream(file);
-                ObjectInputStream OOS = new ObjectInputStream(FIT);
-                return (LevelInfo) OOS.readObject();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            return LoadObject(file);
         }
             return null;
+    }
+
+    public static Progression LoadProgression()
+    {
+        if (isExternalStorageWritable()) {
+            File dir = new File(sdCard.getAbsolutePath() + "/PixelGame");
+            File file = new File(dir, "progress.prg");
+            return LoadObject(file);
+        }
+        return null;
+    }
+
+    static <T> void SaveObject(T object, File file)
+    {
+        try {
+            FileOutputStream FOT = new FileOutputStream(file);
+            ObjectOutputStream OOS = new ObjectOutputStream(FOT);
+            OOS.writeObject(object);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static <T> T LoadObject(File file)
+    {
+        try {
+            FileInputStream FIT = new FileInputStream(file);
+            ObjectInputStream OOS = new ObjectInputStream(FIT);
+            return (T) OOS.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static boolean isExternalStorageWritable() {

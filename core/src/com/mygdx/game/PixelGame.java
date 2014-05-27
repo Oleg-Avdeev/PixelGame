@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.GameObjects.Level;
 import com.mygdx.game.GameObjects.LevelInfo;
+import com.mygdx.game.GameObjects.Progression;
 import com.mygdx.game.Menu.MainMenu;
 
 
@@ -16,6 +17,7 @@ public class PixelGame extends ApplicationAdapter {
 
     static int LevelNumber = 0;
     static Level MainLevel;
+    static Progression progress;
 
     public static int PixelScale = 10;
 
@@ -31,7 +33,7 @@ public class PixelGame extends ApplicationAdapter {
         SoundFactory.StartMusic(SoundFactory.Main);
         mainMenu = new MainMenu(batch);
         mainMenu.Active = true;
-
+        progress = new Progression();
     }
 
 	@Override
@@ -85,10 +87,16 @@ public class PixelGame extends ApplicationAdapter {
 
     public static void RunLevel()
     {
+        progress.LevelNumber = LevelNumber;
+        savefile.SaveProgression(progress);
         LevelInfo lvlInfo = savefile.LoadLevelInfo("level-"+LevelNumber+".rbi");
         int levelPosX = Gdx.graphics.getWidth();
         int levelPosY = Gdx.graphics.getHeight();
         MainLevel = new Level(LevelNumber, levelPosX, levelPosY, lvlInfo, batch);
+    }
+
+    public static Progression GetProgression(){
+        return savefile.LoadProgression();
     }
 
     public static void RunLevel(int number)
