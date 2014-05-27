@@ -46,7 +46,7 @@ public class Player {
         }
 
         if (Yshift > 5) {
-            y -= Math.abs(Yshift) / Yshift;
+            y += Math.abs(Yshift) / Yshift;
             Yshift = 0;
         } else if (Yshift <= 5) {
             Yshift = 0;
@@ -55,44 +55,31 @@ public class Player {
 
     public void MakeMovement(int shiftX, int shiftY) {
 
-        boolean Moved = false;
+        if (shiftX != 0 && Yshift == 0) {
 
-        if (shiftX != 0) {
-            Point point = new Point(x + shiftX / Math.abs(shiftX),y);
             if (level.LevelMap[x + shiftX / Math.abs(shiftX)][y] == 1) {
-                MakeXmove(shiftX); Moved = true;
+                MakeXmove(shiftX);
             } else if (level.LevelMap[x + shiftX / Math.abs(shiftX)][y] == 2) {
                 MakeXmove(shiftX);
-                Moved = true;
                 Finish();
-            } else if (level.TriggerTarget.containsKey(point))
-            {
-                MakeXmove(shiftX);
-                Moved = true;
-                ActivateTrigger(point);
-                level.TriggerTarget.remove(point);
             }
         }
 
-        if (shiftY != 0) {
-            Point point = new Point(x,y - shiftY / Math.abs(shiftY));
+        if (shiftY != 0 && Xshift == 0) {
             if (level.LevelMap[x][y - shiftY / Math.abs(shiftY)] == 1) {
-                if (Moved)
-                {Xshift = 0;}
                 MakeYmove(shiftY);
             }
             if (level.LevelMap[x][y - shiftY / Math.abs(shiftY)] == 2) {
                 MakeYmove(shiftY);
                 Finish();
             }
-            else if (level.TriggerTarget.containsKey(point))
-            {
-                if (Moved)
-                {Xshift = 0;}
-                MakeYmove(shiftY);
-                ActivateTrigger(new Point(x,y - shiftY / Math.abs(shiftY)));
-                level.TriggerTarget.remove(point);
-            }
+        }
+
+        Point point = new Point(x, y);
+        if (level.TriggerTarget.containsKey(point)) {
+            ActivateTrigger(point);
+            level.TriggerTarget.remove(point);
+
         }
     }
 

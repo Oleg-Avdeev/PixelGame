@@ -52,6 +52,7 @@ public class LevelParser
                     Point prime = new Point(x,map.getHeight() - y - 1);
                     Point target = new Point(g,map.getHeight() - b - 1);
                     TriggerTarget.put(prime, target);
+                    Map[x][map.getHeight() - y - 1] = 1;
                 }
 
                 else{

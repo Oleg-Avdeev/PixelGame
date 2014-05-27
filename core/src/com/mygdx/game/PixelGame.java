@@ -31,12 +31,14 @@ public class PixelGame extends ApplicationAdapter {
         SoundFactory.StartMusic(SoundFactory.Main);
         mainMenu = new MainMenu(batch);
         mainMenu.Active = true;
+
     }
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         if (!mainMenu.Active) {
             if (Fade) {
                 overlayT += 0.01f;
@@ -87,5 +89,11 @@ public class PixelGame extends ApplicationAdapter {
         int levelPosX = Gdx.graphics.getWidth();
         int levelPosY = Gdx.graphics.getHeight();
         MainLevel = new Level(LevelNumber, levelPosX, levelPosY, lvlInfo, batch);
+    }
+
+    public static void RunLevel(int number)
+    {
+        LevelNumber = number;
+        RunLevel();
     }
 }
