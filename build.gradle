@@ -14,7 +14,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = 'OhMyGod'
+        appName = 'ThePixelGame'
         gdxVersion = '1.0.1'
         roboVMVersion = '0.0.12'
     }

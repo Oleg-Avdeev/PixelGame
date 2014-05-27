@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Music;
 public class SoundFactory {
 
     public static Music Main = Gdx.audio.newMusic(Gdx.files.internal("Main.mp3"));
-    public static Music Menu = Gdx.audio.newMusic(Gdx.files.internal("menu.mp3"));
+    public static Music Menu = Gdx.audio.newMusic(Gdx.files.internal("Menu.mp3"));
 
     private static Music music = Main;
 
