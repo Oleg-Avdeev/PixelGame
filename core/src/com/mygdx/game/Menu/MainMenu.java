@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.PixelGame;
 import com.mygdx.game.SoundFactory;
 
 
@@ -63,8 +64,9 @@ public class MainMenu {
         Exit = new Button(exitStyle);
         Exit.setPosition((Gdx.graphics.getWidth() - 143)/ 2, topMargin - 300);
         Exit.addListener(new InputListener() {
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.exit();
+                return true;
             }
         });
 
@@ -74,8 +76,10 @@ public class MainMenu {
         PlayLevel = new Button(playStyle);
         PlayLevel.setPosition((Gdx.graphics.getWidth() - 349)/ 2, topMargin - 150);
         PlayLevel.addListener(new InputListener() {
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 Active = false;
+                PixelGame.NextLevelPlease();
+                return true;
             }
         });
     }
