@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.GameObjects.Level;
 import com.mygdx.game.GameObjects.Player;
@@ -50,8 +51,10 @@ public class PlayerController implements InputProcessor {
         touch.touched = true;
         touch.touchX = screenX;
         touch.touchY = screenY;
-
         fingers++;
+
+        if (screenX >= Gdx.graphics.getWidth()-64 && screenY <= 64)
+        PixelGame.RunLevel();
 
         return true;
     }

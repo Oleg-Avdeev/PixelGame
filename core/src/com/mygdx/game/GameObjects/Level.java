@@ -16,6 +16,7 @@ import java.util.List;
 public class Level {
 
     Texture level;
+    Texture Restart;
     int[][] LevelMap;
     public Hashtable<Point,Point> TriggerTarget = new Hashtable<Point, Point>();
 
@@ -48,6 +49,8 @@ public class Level {
             }
         }
 
+        Restart = new Texture("Restart.png");
+
         leftMargin = (LevelPosX - level.getWidth() * PixelGame.PixelScale) / 2;
         topMargin = (LevelPosY - level.getHeight() * PixelGame.PixelScale) / 2;
         Sb = sb;
@@ -69,6 +72,7 @@ public class Level {
     public void Draw()
     {
         Sb.draw(level, leftMargin, topMargin, level.getWidth() * PixelGame.PixelScale, level.getHeight() * PixelGame.PixelScale);
+        Sb.draw(Restart, Gdx.graphics.getWidth() - 64, Gdx.graphics.getHeight() - 64);
         for(Player player : Players)
         {
             if (!player.Finished)
