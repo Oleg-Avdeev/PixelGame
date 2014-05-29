@@ -50,6 +50,7 @@ public class LevelParser
                 else if (cola == 0.2f)
                 {
                     int r = (int)(color.r*255);
+                    if (r != 127)
                     bulbsTarget.put(r, new Point(x, map.getHeight() - y - 1));
                 }
                 else if (cola == 0.8f)
@@ -69,6 +70,8 @@ public class LevelParser
                 }
             }
         LevelInfo LvlInfo = new LevelInfo(Map, Starts, TriggerTarget, Bulbs());
+        bulbsSource = new Hashtable<Integer, Point>();
+        bulbsTarget = new Hashtable<Integer, Point>();
         savefile.SaveLevel(LvlInfo, LevelNumber);
     }
 
