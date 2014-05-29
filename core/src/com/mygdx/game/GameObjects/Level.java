@@ -19,9 +19,11 @@ public class Level {
     Texture Restart;
     int[][] LevelMap;
     public Hashtable<Point,Point> TriggerTarget = new Hashtable<Point, Point>();
+    Hashtable<Point, Point> Bulbs = new Hashtable<Point, Point>();
 
-    public int TriggerColor = (184 << 24) | (37 << 16) | (53 << 8) | 255;
-    public int Road = (0x12 << 24) | (0x79 << 16) | (0xae << 8) | 255;
+    public static int TriggerColor = (184 << 24) | (37 << 16) | (53 << 8) | 255;
+    public static int Active = (0x54 << 24) | (0xea << 16) | (0x2b << 8) | 255;
+    public static int Road = (0x12 << 24) | (0x79 << 16) | (0xae << 8) | 255;
 
     SpriteBatch Sb;
     public int leftMargin;
@@ -43,9 +45,14 @@ public class Level {
                 Players.add(new Player(sb, this, start));
             }
             TriggerTarget = lvlInfo.TriggerTarget;
+            Bulbs = lvlInfo.Bulbs;
             for(Point prime : TriggerTarget.keySet())
             {
                 SetPixel(prime.X, prime.Y, TriggerColor);
+            }
+            for(Point point : Bulbs.values())
+            {
+                SetPixel(point.X, point.Y, TriggerColor);
             }
         }
 

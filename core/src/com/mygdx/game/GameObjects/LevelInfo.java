@@ -12,12 +12,14 @@ public class LevelInfo implements Serializable
     int[][] MapArray;
     public List<Point> Starts = new ArrayList<Point>();
     Hashtable<Point,Point> TriggerTarget;
+    Hashtable<Point, Point> Bulbs;
 
-    public LevelInfo(int[][] map, List<Point> starts, Hashtable<Point, Point> triggerTarget)
+    public LevelInfo(int[][] map, List<Point> starts, Hashtable<Point, Point> triggerTarget, Hashtable<Point, Point> bulbs)
     {
         MapArray = map;
         Starts = starts;
         TriggerTarget = triggerTarget;
+        Bulbs = bulbs;
     }
 }
 

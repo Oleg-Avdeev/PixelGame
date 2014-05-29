@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.PixelGame;
 import com.mygdx.game.Point;
+import com.mygdx.game.SoundFactory;
 
 
 public class Player {
@@ -85,10 +86,15 @@ public class Player {
 
     private void ActivateTrigger(Point point) {
         Point target = level.TriggerTarget.get(point);
+        Point bulb = level.Bulbs.get(point);
+        SoundFactory.PlaySound(SoundFactory.Trigger);
+
         level.LevelMap[target.X][target.Y] = 1;
-        level.LevelMap[point.X][point.Y] = 1;
-        level.SetPixel(target.X,target.Y, level.Road);
-        level.SetPixel(point.X,point.Y, level.Road);
+
+        level.SetPixel(target.X,target.Y, Level.Road);
+        level.SetPixel(point.X,point.Y, Level.Road);
+        if (bulb != null)
+        level.SetPixel(bulb.X, bulb.Y, Level.Active);
     }
 
 

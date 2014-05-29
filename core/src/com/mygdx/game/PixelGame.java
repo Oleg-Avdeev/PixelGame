@@ -102,6 +102,7 @@ public class PixelGame extends ApplicationAdapter {
     public static void RunLevel(int number)
     {
         LevelNumber = number;
+        LevelParser.ParseNextLevel(LevelNumber, savefile);
         RunLevel();
     }
 }

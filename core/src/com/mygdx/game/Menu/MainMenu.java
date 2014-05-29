@@ -80,6 +80,7 @@ public class MainMenu {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 Active = false;
                 Progression progression = PixelGame.GetProgression();
+                SoundFactory.StartMusic(SoundFactory.Main);
                 if (progression != null)
                     PixelGame.RunLevel(progression.LevelNumber);
                 else

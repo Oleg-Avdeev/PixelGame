@@ -15,6 +15,9 @@ public class LevelParser
     static SaveFile savefile;
     static int LevelNumber;
 
+    static Hashtable<Integer, Point> bulbsTarget = new Hashtable<Integer, Point>();
+    static Hashtable<Integer, Point> bulbsSource = new Hashtable<Integer, Point>();
+
     public static void ParseTexture(Texture leveltex, SaveFile _savefile)
     {
         savefile = _savefile;
@@ -44,11 +47,17 @@ public class LevelParser
 
                 else if (col.equals("ec9b00ff"))
                 { Map[x][map.getHeight() - y - 1] = 2;}
-
+                else if (cola == 0.2f)
+                {
+                    int r = (int)(color.r*255);
+                    bulbsTarget.put(r, new Point(x, map.getHeight() - y - 1));
+                }
                 else if (cola == 0.8f)
                 {
+                    int r = (int)(color.r*255);
                     int g = (int)(color.g*255);
                     int b = (int)(color.b*255);
+                    bulbsSource.put(r, new Point(x, map.getHeight() - y - 1));
                     Point prime = new Point(x,map.getHeight() - y - 1);
                     Point target = new Point(g,map.getHeight() - b - 1);
                     TriggerTarget.put(prime, target);
@@ -59,8 +68,19 @@ public class LevelParser
                     Map[x][map.getHeight() - y - 1] = 0;
                 }
             }
-        LevelInfo LvlInfo = new LevelInfo(Map, Starts, TriggerTarget);
+        LevelInfo LvlInfo = new LevelInfo(Map, Starts, TriggerTarget, Bulbs());
         savefile.SaveLevel(LvlInfo, LevelNumber);
+    }
+
+    static Hashtable<Point, Point> Bulbs()
+    {
+        Hashtable<Point, Point> bulbs = new Hashtable<Point, Point>();
+        for (Integer key : bulbsSource.keySet())
+        {
+            if (bulbsTarget.containsKey(key))
+            bulbs.put(bulbsSource.get(key), bulbsTarget.get(key));
+        }
+        return bulbs;
     }
 
     public static void ParseNextLevel(int levelNumber, SaveFile sf)
