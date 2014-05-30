@@ -52,7 +52,6 @@ public class PixelGame extends ApplicationAdapter {
                     NextLevelPlease();
                 }
             }
-
             batch.setColor(overlay);
             batch.enableBlending();
             batch.begin();

@@ -34,6 +34,10 @@ public class Level {
     int FinishedPlayers = 0;
     public List<Player> Players;
 
+    public Texture Joystick = new Texture("joystick.png");
+    public Texture JoystickCenter = new Texture("center.png");
+    public boolean DrawJoystick= false;
+
     public Level (int LevelNumber, int LevelPosX, int LevelPosY, LevelInfo lvlInfo, SpriteBatch sb) {
 
         if (lvlInfo != null) {
@@ -63,6 +67,7 @@ public class Level {
         topMargin = (LevelPosY - level.getHeight() * PixelGame.PixelScale) / 2;
         Sb = sb;
 
+
         Controller = new PlayerController(this);
         Gdx.input.setInputProcessor(Controller);
     }
@@ -85,6 +90,10 @@ public class Level {
         {
             if (!player.Finished)
                 player.Draw();
+        }
+        if (DrawJoystick)
+        {
+            Controller.DrawJoystick(Sb);
         }
         if (FinishedPlayers == Players.size())
             PixelGame.Fade = true;

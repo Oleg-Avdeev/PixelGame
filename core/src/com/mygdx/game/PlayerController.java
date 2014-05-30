@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.GameObjects.Level;
 import com.mygdx.game.GameObjects.Player;
 
@@ -45,6 +46,11 @@ public class PlayerController implements InputProcessor {
         return 0;
     }
 
+    public void DrawJoystick(SpriteBatch sb){
+        sb.draw(level.Joystick, touch.touchX - level.Joystick.getWidth()/2, (Gdx.graphics.getHeight() - touch.touchY) - level.Joystick.getHeight()/2);
+        sb.draw(level.JoystickCenter, FingerX - level.JoystickCenter.getWidth()/2, Gdx.graphics.getHeight() - FingerY - level.JoystickCenter.getHeight()/2);
+    }
+
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -52,6 +58,11 @@ public class PlayerController implements InputProcessor {
         touch.touchX = screenX;
         touch.touchY = screenY;
         fingers++;
+
+        FingerX = screenX;
+        FingerY = screenY;
+
+        level.DrawJoystick = true;
 
         if (screenX >= Gdx.graphics.getWidth()-64 && screenY <= 64)
         PixelGame.RunLevel();
@@ -64,8 +75,9 @@ public class PlayerController implements InputProcessor {
         touch.touched = false;
         touch.touchX = 0;
         touch.touchY = 0;
-
         fingers--;
+
+        level.DrawJoystick = false;
 
         for(Player player : level.Players)
         {
@@ -76,9 +88,16 @@ public class PlayerController implements InputProcessor {
         return true;
     }
 
+    int FingerX;
+    int FingerY;
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
     if (fingers <= 2) {
+
+        FingerX = screenX;
+        FingerY = screenY;
+
         float deltaX = screenX - touch.touchX;
         float deltaY = screenY - touch.touchY;
 
