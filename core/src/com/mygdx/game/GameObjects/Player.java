@@ -63,6 +63,8 @@ public class Player {
             } else if (level.LevelMap[x + shiftX / Math.abs(shiftX)][y] == 2) {
                 MakeXmove(shiftX);
                 Finish();
+            } else if (level.LevelMap[x + shiftX / Math.abs(shiftX)][y] == 3) {
+                MakeXmove(shiftX);
             }
         }
 
@@ -73,7 +75,14 @@ public class Player {
             if (level.LevelMap[x][y - shiftY / Math.abs(shiftY)] == 2) {
                 MakeYmove(shiftY);
                 Finish();
+            } else if (level.LevelMap[x][y - shiftY / Math.abs(shiftY)] == 3) {
+                MakeYmove(shiftY);
             }
+        }
+
+        if (level.LevelMap[x][y] == 3) {
+            level.LevelMap[x][y] = 0;
+            level.SetPixel(x, y, Level.Block);
         }
 
         Point point = new Point(x, y);

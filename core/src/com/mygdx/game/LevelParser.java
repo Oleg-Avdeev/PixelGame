@@ -47,12 +47,17 @@ public class LevelParser
 
                 else if (col.equals("ec9b00ff"))
                 { Map[x][map.getHeight() - y - 1] = 2;}
+
+                else if (col.equals("bede2cff"))
+                { Map[x][map.getHeight() - y - 1] = 3;}
+
                 else if (cola == 0.2f)
                 {
                     int r = (int)(color.r*255);
                     if (r != 127)
                     bulbsTarget.put(r, new Point(x, map.getHeight() - y - 1));
                 }
+
                 else if (cola == 0.8f)
                 {
                     int r = (int)(color.r*255);

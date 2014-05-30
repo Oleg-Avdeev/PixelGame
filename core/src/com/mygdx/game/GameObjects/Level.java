@@ -24,6 +24,7 @@ public class Level {
     public static int TriggerColor = (184 << 24) | (37 << 16) | (53 << 8) | 255;
     public static int Active = (0x54 << 24) | (0xea << 16) | (0x2b << 8) | 255;
     public static int Road = (0x12 << 24) | (0x79 << 16) | (0xae << 8) | 255;
+    public static int Block = (0x4f << 24) | (0x4f << 16) | (0x4f << 8) | 255;
 
     SpriteBatch Sb;
     public int leftMargin;
