@@ -39,17 +39,17 @@ public class Player {
     }
 
     public void Release() {
-        if (Math.abs(Xshift) > 5) {
+        if (Math.abs(Xshift) > 20) {
             x += Math.abs(Xshift) / Xshift;
             Xshift = 0;
-        } else if (Math.abs(Xshift) <= 5) {
+        } else if (Math.abs(Xshift) <= 20) {
             Xshift = 0;
         }
 
-        if (Yshift > 5) {
+        if (Yshift > 20) {
             y += Math.abs(Yshift) / Yshift;
             Yshift = 0;
-        } else if (Yshift <= 5) {
+        } else if (Yshift <= 20) {
             Yshift = 0;
         }
     }
