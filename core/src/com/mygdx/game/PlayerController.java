@@ -101,6 +101,12 @@ public class PlayerController implements InputProcessor {
         float deltaX = screenX - touch.touchX;
         float deltaY = screenY - touch.touchY;
 
+        float negateFactor = 0.5f;
+        if (Math.abs(deltaX * negateFactor) > Math.abs(deltaY))
+            deltaY = 0.0f;
+        if (Math.abs(deltaY * negateFactor) > Math.abs(deltaX))
+            deltaX = 0.0f;
+
         int shiftX = getSpeed(deltaX);
         int shiftY = getSpeed(deltaY);
 

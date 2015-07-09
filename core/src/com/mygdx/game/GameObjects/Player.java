@@ -16,6 +16,8 @@ public class Player {
     private int x, y;
     private int Xshift = 0, Yshift = 0;
 
+    private int lastXshift = 0, lastYshift = 0;
+
     public boolean Finished = false;
 
     public Player(SpriteBatch sb, Level lev, Point start)
@@ -52,9 +54,13 @@ public class Player {
         } else if (Yshift <= 20) {
             Yshift = 0;
         }
+        lastXshift = lastYshift = 0;
+
     }
 
     public void MakeMovement(int shiftX, int shiftY) {
+        lastXshift = shiftX;
+        lastYshift = shiftY;
 
         if (shiftX != 0 && Yshift == 0) {
 
@@ -133,4 +139,12 @@ public class Player {
         Finished = true;
     }
 
+    public void RepeatLastMovement()
+    {
+        if (Finished)
+            return;
+
+        if (lastXshift != 0 || lastYshift != 0)
+            MakeMovement(lastXshift, lastYshift);
+    }
 }

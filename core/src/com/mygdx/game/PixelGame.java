@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.GameObjects.Level;
 import com.mygdx.game.GameObjects.LevelInfo;
+import com.mygdx.game.GameObjects.Player;
 import com.mygdx.game.GameObjects.Progression;
 import com.mygdx.game.Menu.MainMenu;
 
@@ -21,7 +22,10 @@ public class PixelGame extends ApplicationAdapter {
 
     public static int PixelScale = 10;
 
+    long timeStep = 16; //time step between frames in milliseconds
+
     MainMenu mainMenu;
+    long lastFrameTime;
 
     public PixelGame(SaveFile saveFile){
         savefile = saveFile;
@@ -38,6 +42,8 @@ public class PixelGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+        lastFrameTime = System.currentTimeMillis();
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -56,12 +62,27 @@ public class PixelGame extends ApplicationAdapter {
             batch.enableBlending();
             batch.begin();
             MainLevel.Draw();
+            for(Player player : MainLevel.Players)
+            {
+                if (!player.Finished)
+                    player.RepeatLastMovement();
+            }
+
             batch.end();
         }
         else {
             batch.begin();
             mainMenu.Draw();
             batch.end();
+        }
+
+        long delta = System.currentTimeMillis() - lastFrameTime;
+        if (delta < timeStep) {
+            try {
+                Thread.sleep(timeStep - delta);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 	}
 
