@@ -47,9 +47,8 @@ public class MainMenu {
         stage.clear();
         stage.addActor(logo);
         stage.addActor(PlayLevel);
+        stage.addActor(Levels);
         stage.addActor(Exit);
-
-        Gdx.input.setInputProcessor(stage);
 
         SoundFactory.StartMusic(SoundFactory.Menu);
     }
@@ -63,7 +62,7 @@ public class MainMenu {
         exitStyle.up = buttonSkin.getDrawable("exit");
         exitStyle.down = buttonSkin.getDrawable("exit_pressed");
         Exit = new Button(exitStyle);
-        Exit.setPosition((Gdx.graphics.getWidth() - 143)/ 2, topMargin - 300);
+        Exit.setPosition((Gdx.graphics.getWidth() - 143) / 2, topMargin - 300);
         Exit.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.exit();
@@ -75,9 +74,9 @@ public class MainMenu {
         playStyle.up = buttonSkin.getDrawable("continue");
         playStyle.down = buttonSkin.getDrawable("continue_pressed");
         PlayLevel = new Button(playStyle);
-        PlayLevel.setPosition((Gdx.graphics.getWidth() - 349)/ 2, topMargin - 150);
+        PlayLevel.setPosition((Gdx.graphics.getWidth() - 349) / 2, topMargin - 150);
         PlayLevel.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Active = false;
                 Progression progression = PixelGame.GetProgression();
                 SoundFactory.StartMusic(SoundFactory.Main);
@@ -85,6 +84,18 @@ public class MainMenu {
                     PixelGame.RunLevel(progression.LevelNumber);
                 else
                     PixelGame.RunLevel(1);
+                return true;
+            }
+        });
+
+        Button.ButtonStyle levelsStyle = new Button.ButtonStyle();
+        levelsStyle.up = buttonSkin.getDrawable("levels");
+        levelsStyle.down = buttonSkin.getDrawable("levels_pressed");
+        Levels = new Button(levelsStyle);
+        Levels.setPosition((Gdx.graphics.getWidth() - 266) / 2, topMargin - 230);
+        Levels.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                PixelGame.SetState(PixelGame.ScreenState.LevelsMenu);
                 return true;
             }
         });
@@ -96,5 +107,10 @@ public class MainMenu {
         stage.draw();
         //Exit.draw(batch, 1.0f);
         batch.draw(Logo, leftMargin, topMargin);
+    }
+
+    public void EnableInput()
+    {
+        Gdx.input.setInputProcessor(stage);
     }
 }

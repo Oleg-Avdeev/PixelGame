@@ -9,10 +9,15 @@ import com.mygdx.game.GameObjects.Level;
 import com.mygdx.game.GameObjects.LevelInfo;
 import com.mygdx.game.GameObjects.Player;
 import com.mygdx.game.GameObjects.Progression;
-import com.mygdx.game.Menu.MainMenu;
+import com.mygdx.game.Menu.*;
 
 
 public class PixelGame extends ApplicationAdapter {
+    public enum ScreenState
+    {
+        Game, MainMenu, LevelsMenu
+    }
+
 	static SpriteBatch batch;
     static SaveFile savefile;
 
@@ -21,10 +26,13 @@ public class PixelGame extends ApplicationAdapter {
     static Progression progress;
 
     public static int PixelScale = 10;
+    public static int MaxLevels = 20;
 
     long timeStep = 16; //time step between frames in milliseconds
 
-    MainMenu mainMenu;
+    static MainMenu mainMenu;
+    static LevelMenu levelMenu;
+
     long lastFrameTime;
 
     public PixelGame(SaveFile saveFile){
@@ -37,6 +45,9 @@ public class PixelGame extends ApplicationAdapter {
         SoundFactory.StartMusic(SoundFactory.Main);
         mainMenu = new MainMenu(batch);
         mainMenu.Active = true;
+        mainMenu.EnableInput();
+        levelMenu = new LevelMenu(batch);
+        levelMenu.Active = false;
         progress = new Progression();
     }
 
@@ -47,7 +58,7 @@ public class PixelGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!mainMenu.Active) {
+        if (!mainMenu.Active && !levelMenu.Active) {
             if (Fade) {
                 overlayT += 0.01f;
                 overlay.lerp(new Color(Color.BLACK), overlayT);
@@ -70,9 +81,14 @@ public class PixelGame extends ApplicationAdapter {
 
             batch.end();
         }
-        else {
+        else if (mainMenu.Active) {
             batch.begin();
             mainMenu.Draw();
+            batch.end();
+        }
+        else if (levelMenu.Active) {
+            batch.begin();
+            levelMenu.Draw();
             batch.end();
         }
 
@@ -107,7 +123,8 @@ public class PixelGame extends ApplicationAdapter {
 
     public static void RunLevel()
     {
-        progress.LevelNumber = LevelNumber;
+        progress = savefile.LoadProgression();
+        progress.LevelNumber = Math.max(LevelNumber, progress.LevelNumber);
         savefile.SaveProgression(progress);
         LevelInfo lvlInfo = savefile.LoadLevelInfo("level-"+LevelNumber+".rbi");
         int levelPosX = Gdx.graphics.getWidth();
@@ -124,5 +141,34 @@ public class PixelGame extends ApplicationAdapter {
         LevelNumber = number;
         LevelParser.ParseNextLevel(LevelNumber, savefile);
         RunLevel();
+    }
+
+    //quick 'n dirty
+    public static void SetState(ScreenState state)
+    {
+        switch(state)
+        {
+            case Game:
+                mainMenu.Active = false;
+                levelMenu.Active = false;
+                //MainLevel.EnableInput();
+                break;
+            case MainMenu:
+                mainMenu.Active = true;
+                levelMenu.Active = false;
+                mainMenu.EnableInput();
+                break;
+            case LevelsMenu:
+                mainMenu.Active = false;
+                levelMenu.Active = true;
+                levelMenu.EnableInput();
+                break;
+
+        }
+    }
+
+    public static void ResetProgress() {
+        progress.LevelNumber = 1;
+        savefile.SaveProgression(progress);
     }
 }

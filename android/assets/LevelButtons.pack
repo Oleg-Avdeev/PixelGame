@@ -1,0 +1,19 @@
+
+LevelButtons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+next
+  rotate: false
+  xy: 0, 0
+  size: 89, 110
+  orig: 89, 110
+  offset: 0, 0
+  index: -1
+prev
+  rotate: false
+  xy: 89, 0
+  size: 89, 110
+  orig: 89, 110
+  offset: 0, 0
+  index: -1

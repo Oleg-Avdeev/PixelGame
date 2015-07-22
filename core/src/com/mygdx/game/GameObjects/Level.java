@@ -69,7 +69,7 @@ public class Level {
 
 
         Controller = new PlayerController(this);
-        Gdx.input.setInputProcessor(Controller);
+        EnableInput();
     }
 
     public void SetPixel(int x, int y, int color)
@@ -97,5 +97,10 @@ public class Level {
         }
         if (FinishedPlayers == Players.size())
             PixelGame.Fade = true;
+    }
+
+    public void EnableInput()
+    {
+        Gdx.input.setInputProcessor(Controller);
     }
 }
