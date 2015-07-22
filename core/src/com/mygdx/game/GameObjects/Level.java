@@ -69,7 +69,17 @@ public class Level {
 
 
         Controller = new PlayerController(this);
+        Progression curProg = PixelGame.GetProgression();
+        if (curProg.Moves.size() >= PixelGame.GetCurrentLevelNumber())
+            SetPhantomData(curProg.Moves.get(PixelGame.GetCurrentLevelNumber() - 1));
+
         EnableInput();
+    }
+
+    public void SetPhantomData(List<List<Point>> data)
+    {
+        for (int i = 0; i < Players.size(); i++)
+            Players.get(i).SetPhantomData(data.get(i));
     }
 
     public void SetPixel(int x, int y, int color)

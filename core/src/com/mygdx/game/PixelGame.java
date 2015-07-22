@@ -11,17 +11,20 @@ import com.mygdx.game.GameObjects.Player;
 import com.mygdx.game.GameObjects.Progression;
 import com.mygdx.game.Menu.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PixelGame extends ApplicationAdapter {
-    public enum ScreenState
-    {
+    public enum ScreenState {
         Game, MainMenu, LevelsMenu
     }
 
-	static SpriteBatch batch;
+    static SpriteBatch batch;
     static SaveFile savefile;
 
-    static int LevelNumber = 0;
+    static int LevelNumber;
+    static int MaxLevelNumber;
     static Level MainLevel;
     static Progression progress;
 
@@ -35,13 +38,14 @@ public class PixelGame extends ApplicationAdapter {
 
     long lastFrameTime;
 
-    public PixelGame(SaveFile saveFile){
+    public PixelGame(SaveFile saveFile) {
         savefile = saveFile;
+        MaxLevelNumber = GetProgression().LevelNumber;
     }
 
     @Override
-	public void create () {
-		batch = new SpriteBatch();
+    public void create() {
+        batch = new SpriteBatch();
         SoundFactory.StartMusic(SoundFactory.Main);
         mainMenu = new MainMenu(batch);
         mainMenu.Active = true;
@@ -51,12 +55,12 @@ public class PixelGame extends ApplicationAdapter {
         progress = new Progression();
     }
 
-	@Override
-	public void render () {
+    @Override
+    public void render() {
         lastFrameTime = System.currentTimeMillis();
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (!mainMenu.Active && !levelMenu.Active) {
             if (Fade) {
@@ -73,20 +77,17 @@ public class PixelGame extends ApplicationAdapter {
             batch.enableBlending();
             batch.begin();
             MainLevel.Draw();
-            for(Player player : MainLevel.Players)
-            {
+            for (Player player : MainLevel.Players) {
                 if (!player.Finished)
                     player.RepeatLastMovement();
             }
 
             batch.end();
-        }
-        else if (mainMenu.Active) {
+        } else if (mainMenu.Active) {
             batch.begin();
             mainMenu.Draw();
             batch.end();
-        }
-        else if (levelMenu.Active) {
+        } else if (levelMenu.Active) {
             batch.begin();
             levelMenu.Draw();
             batch.end();
@@ -100,17 +101,32 @@ public class PixelGame extends ApplicationAdapter {
                 e.printStackTrace();
             }
         }
-	}
+    }
 
-    public static void NextLevelPlease()
-    {
+    public static void NextLevelPlease() {
         try {
+            List<List<Point>> newMoves = new ArrayList<List<Point>>();
+            for (int i = 0; i < MainLevel.Players.size(); i++)
+                newMoves.add(MainLevel.Players.get(i).GetMoves());
+
+            Progression curProg = savefile.LoadProgression();
+            if (curProg.Moves != null)
+                if (curProg.Moves.size() >= LevelNumber)
+                    curProg.Moves.set(LevelNumber - 1, newMoves);
+                else
+                    curProg.Moves.add(newMoves);
+            else
+            {
+                curProg.Moves = new ArrayList<List<List<Point>>>();
+                curProg.Moves.add(LevelNumber - 1, newMoves);
+            }
+
+            savefile.SaveProgression(curProg);
+
             LevelNumber++;
             LevelParser.ParseNextLevel(LevelNumber, savefile);
             RunLevel();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             LevelNumber--;
             LevelParser.ParseNextLevel(LevelNumber, savefile);
             RunLevel();
@@ -121,33 +137,31 @@ public class PixelGame extends ApplicationAdapter {
     private float overlayT = 0.0f;
     private Color overlay = new Color(Color.WHITE);
 
-    public static void RunLevel()
-    {
+    public static void RunLevel() {
         progress = savefile.LoadProgression();
         progress.LevelNumber = Math.max(LevelNumber, progress.LevelNumber);
+        MaxLevelNumber = progress.LevelNumber;
         savefile.SaveProgression(progress);
-        LevelInfo lvlInfo = savefile.LoadLevelInfo("level-"+LevelNumber+".rbi");
+        LevelInfo lvlInfo = savefile.LoadLevelInfo("level-" + LevelNumber + ".rbi");
         int levelPosX = Gdx.graphics.getWidth();
         int levelPosY = Gdx.graphics.getHeight();
         MainLevel = new Level(LevelNumber, levelPosX, levelPosY, lvlInfo, batch);
     }
 
-    public static Progression GetProgression(){
+    public static Progression GetProgression() {
         return savefile.LoadProgression();
     }
 
-    public static void RunLevel(int number)
-    {
+    public static void RunLevel(int number) {
+        MaxLevelNumber = GetProgression().LevelNumber;
         LevelNumber = number;
         LevelParser.ParseNextLevel(LevelNumber, savefile);
         RunLevel();
     }
 
     //quick 'n dirty
-    public static void SetState(ScreenState state)
-    {
-        switch(state)
-        {
+    public static void SetState(ScreenState state) {
+        switch (state) {
             case Game:
                 mainMenu.Active = false;
                 levelMenu.Active = false;
@@ -170,5 +184,14 @@ public class PixelGame extends ApplicationAdapter {
     public static void ResetProgress() {
         progress.LevelNumber = 1;
         savefile.SaveProgression(progress);
+    }
+
+    public static int GetCurrentLevelNumber() {
+        return LevelNumber;
+    }
+
+    public static int GetMaxLevelNumber()
+    {
+        return MaxLevelNumber;
     }
 }

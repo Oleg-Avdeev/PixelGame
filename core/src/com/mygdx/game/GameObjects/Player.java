@@ -6,10 +6,14 @@ import com.mygdx.game.PixelGame;
 import com.mygdx.game.Point;
 import com.mygdx.game.SoundFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Player {
 
     Texture PlayerTexture;
+    Texture PhantomTexture;
     SpriteBatch Sb;
     Level level;
 
@@ -20,9 +24,16 @@ public class Player {
 
     public boolean Finished = false;
 
+    //Phantom-related
+    private List<Point> moves = new ArrayList<Point>();
+    private List<Point> newMoves = new ArrayList<Point>();
+
+    private int phantomStep, phantomDelta;
+
     public Player(SpriteBatch sb, Level lev, Point start)
     {
         PlayerTexture = new Texture("Player.png");
+        PhantomTexture = new Texture("Phantom.png");
         Sb = sb;
         level = lev;
         x = start.X;
@@ -38,6 +49,35 @@ public class Player {
                 (PlayerTexture.getWidth() * PixelGame.PixelScale),
                 (PlayerTexture.getHeight() * PixelGame.PixelScale)
         );
+
+        if (PixelGame.GetCurrentLevelNumber() != PixelGame.GetMaxLevelNumber())
+        {
+            //Phantom code
+            if (moves != null)
+                if (moves.size() > 0)
+                {
+                    int pX = moves.get(phantomStep).X;
+                    int pY = moves.get(phantomStep).Y;
+
+                    int hDelta = moves.get(phantomStep + 1).X - pX;
+                    int vDelta = moves.get(phantomStep + 1).Y - pY;
+
+                    Sb.draw(PhantomTexture,
+                            level.leftMargin + hDelta * phantomDelta + pX * PixelGame.PixelScale,
+                            level.topMargin + vDelta * phantomDelta + pY * PixelGame.PixelScale,
+                            PhantomTexture.getWidth() * PixelGame.PixelScale,
+                            PhantomTexture.getHeight() * PixelGame.PixelScale);
+
+                    //Progress to next move
+                    phantomDelta += 5;
+                    if (phantomDelta >= PixelGame.PixelScale)
+                    {
+                        phantomDelta = 0; phantomStep += 1;
+                        if (phantomStep >= moves.size() - 2)
+                            phantomStep = 0;
+                    }
+                }
+        }
     }
 
     public void Release() {
@@ -120,6 +160,7 @@ public class Player {
         } else {
             Xshift = 0;
             x += shift / Math.abs(shift);
+            newMoves.add(new Point(x, y));
         }
     }
 
@@ -130,6 +171,7 @@ public class Player {
         } else {
             Yshift = 0;
             y -= shift / Math.abs(shift);
+            newMoves.add(new Point(x, y));
         }
     }
 
@@ -137,6 +179,7 @@ public class Player {
     {
         level.FinishedPlayers++;
         Finished = true;
+        moves = newMoves; //copy new phantom info
     }
 
     public void RepeatLastMovement()
@@ -146,5 +189,15 @@ public class Player {
 
         if (lastXshift != 0 || lastYshift != 0)
             MakeMovement(lastXshift, lastYshift);
+    }
+
+    public List<Point> GetMoves()
+    {
+        return new ArrayList<Point>(moves);
+    }
+
+    public void SetPhantomData(List<Point> savedMoves)
+    {
+        moves = savedMoves;
     }
 }
