@@ -1,4 +1,4 @@
-package com.mygdx.game.android;
+package com.mygdx.game.pixelgame;
 
 import android.os.Environment;
 import android.util.Log;

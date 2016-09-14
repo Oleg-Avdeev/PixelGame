@@ -1,4 +1,4 @@
-package com.mygdx.game.android;
+package com.mygdx.game.pixelgame;
 
 import com.mygdx.game.GameObjects.LevelInfo;
 import com.mygdx.game.GameObjects.Progression;

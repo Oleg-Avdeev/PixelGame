@@ -14,7 +14,6 @@ import com.mygdx.game.Menu.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PixelGame extends ApplicationAdapter {
     public enum ScreenState {
         Game, MainMenu, LevelsMenu

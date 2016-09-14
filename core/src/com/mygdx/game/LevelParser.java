@@ -25,6 +25,7 @@ public class LevelParser
         data.prepare();
         Pixmap map = data.consumePixmap();
 
+
         Color color = new Color();
         List<Point> Starts = new ArrayList<Point>();
         Hashtable<Point,Point> TriggerTarget = new Hashtable<Point, Point>();
@@ -75,6 +76,7 @@ public class LevelParser
                 }
             }
         LevelInfo LvlInfo = new LevelInfo(Map, Starts, TriggerTarget, Bulbs());
+
         bulbsSource = new Hashtable<Integer, Point>();
         bulbsTarget = new Hashtable<Integer, Point>();
         savefile.SaveLevel(LvlInfo, LevelNumber);
