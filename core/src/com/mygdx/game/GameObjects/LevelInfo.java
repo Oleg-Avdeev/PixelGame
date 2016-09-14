@@ -20,6 +20,7 @@ public class LevelInfo implements Serializable
         Starts = starts;
         TriggerTarget = triggerTarget;
         Bulbs = bulbs;
+
     }
 }
 

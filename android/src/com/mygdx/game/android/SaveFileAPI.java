@@ -1,6 +1,7 @@
 package com.mygdx.game.android;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.mygdx.game.GameObjects.LevelInfo;
 import com.mygdx.game.GameObjects.Progression;
@@ -51,6 +52,12 @@ public class SaveFileAPI {
         if (isExternalStorageWritable()) {
             File dir = new File(sdCard.getAbsolutePath() + "/PixelGame");
             File file = new File(dir, "progress.prg");
+            if (!file.exists()) {
+                Log.v("PixelGame", "No save file found, creating a new one");
+                Progression newGame = new Progression();
+                newGame.LevelNumber = 1;
+                SaveProgression(newGame);
+            }
             return LoadObject(file);
         }
         return null;

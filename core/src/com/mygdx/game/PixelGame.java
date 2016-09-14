@@ -40,7 +40,10 @@ public class PixelGame extends ApplicationAdapter {
 
     public PixelGame(SaveFile saveFile) {
         savefile = saveFile;
-        MaxLevelNumber = GetProgression().LevelNumber;
+        if (GetProgression() != null)
+            MaxLevelNumber = GetProgression().LevelNumber;
+        else
+            MaxLevelNumber = 1;
     }
 
     @Override

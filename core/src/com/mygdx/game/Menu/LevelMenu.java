@@ -143,12 +143,14 @@ public class LevelMenu {
 
     private void ScrollToLevel(int number)
     {
+        number--;
         levelPicture.setDrawable(levelTex.get(number));
         levelPicture.setSize(levelTex.get(number).getSprite().getTexture().getWidth() * PixelGame.PixelScale,
                 levelTex.get(number).getSprite().getTexture().getHeight() * PixelGame.PixelScale);
 
         levelPicture.setPosition((Gdx.graphics.getWidth() - levelPicture.getWidth()) / 2.0f,
                 (Gdx.graphics.getHeight() - levelPicture.getHeight()) / 2.0f);
+        number++;
         lvlName.setText("Level " + String.format("%2s", number) + " of "
                 + Integer.toString(PixelGame.MaxLevels));
         lvlName.setPosition((Gdx.graphics.getWidth() - lvlName.getWidth()) / 2.0f,
